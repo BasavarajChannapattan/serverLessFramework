@@ -1,16 +1,35 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: suntech
-# "service" is the name of this project. This will also be added to your AWS resource names.
-service: Rest-Api
+service: grocery-store-lambda
 
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs18.x
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+      Resource: "*"
 
 functions:
-  hello:
-    handler: handler.hello
+  getStatus:
+    handler: handler.getStatus
     events:
-      - httpApi:
-          path: /
+      - http:
+          path: status
           method: get
+          cors: true
+
+
+  getProducts:
+    handler: handler.getProducts
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true
+
+package:
+  include:
+    - node_modules/**
