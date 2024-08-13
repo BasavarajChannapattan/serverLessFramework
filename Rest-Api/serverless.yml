@@ -30,6 +30,24 @@ functions:
           method: get
           cors: true
 
+  createCart:
+    handler: handler.createCart
+    events:
+      - http:
+          path: carts
+          method: post
+          cors: true
+
+  getCart:
+    handler: handler.getCart
+    events:
+      - http:
+          path: carts/{cartId}
+          method: get
+          cors: true
+
+
+
 package:
   include:
     - node_modules/**
