@@ -1,7 +1,6 @@
 const axios = require("axios");
 const { utils } = require("./helpers/index");
 const constants = utils.constants;
-
 const baseUrl = constants.baseUrl;
 
 module.exports.getStatus = async (event) => {
@@ -28,7 +27,7 @@ module.exports.getProducts = async (event) => {
     };
   } catch (error) {
     return {
-      statusCode: error.res ? error.res.status : 500,
+      statusCode: error.response ? error.response.status : 500,
       body: JSON.stringify({ message: error.message }),
     };
   }
@@ -38,6 +37,7 @@ module.exports.createCart = async (event) => {
   try {
     const createCartRes = await axios.post(`${baseUrl}/carts`);
     const cartId = createCartRes.data.cartId;
+    console.log(JSON.stringify(createCartRes));
 
     if (!cartId) {
       throw new Error("Cart ID not found in the response");
@@ -48,7 +48,6 @@ module.exports.createCart = async (event) => {
       body: JSON.stringify({ cartId }),
     };
   } catch (error) {
-    console.error("Error:", error.message);
     return {
       statusCode: error.response ? error.response.status : 500,
       body: JSON.stringify({
@@ -80,12 +79,75 @@ module.exports.getCart = async (event) => {
       }),
     };
   } catch (error) {
-    console.error("Error:", error.message);
     return {
       statusCode: error.response ? error.response.status : 500,
       body: JSON.stringify({
         message: error.message,
         details: error.response ? error.response.data : undefined,
+      }),
+    };
+  }
+};
+
+module.exports.createUser = async (event) => {
+  const body = JSON.parse(event.body);
+  try {
+    const res = await axios.post(`${baseUrl}/api/users`, {
+      name: body.name,
+      job: body.job,
+    });
+
+    console.log("API response data:", res.data);
+
+    return {
+      statusCode: 201,
+      body: JSON.stringify({
+        name: "Post created successfully",
+        job: res.data.id,
+        id: res.data,
+        createdAt: res.data.createdAt,
+      }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Error creating post",
+        error: error.message,
+      }),
+    };
+  }
+};
+
+module.exports.createPost = async (event) => {
+  const data = JSON.parse(event.body);
+
+  try {
+    const response = await axios.post(
+      "https://jsonplaceholder.typicode.com/posts",
+      {
+        title: data.title,
+        body: data.body,
+        userId: data.userId,
+      }
+    );
+
+    console.log("API response data:", response.data);
+
+    return {
+      statusCode: 201,
+      body: JSON.stringify({
+        message: "Post created successfully",
+        postId: response.data.id,
+        data: response.data,
+      }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Error creating post",
+        error: error.message,
       }),
     };
   }

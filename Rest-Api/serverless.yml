@@ -1,4 +1,3 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
 org: simpleapp
 app: lego
 service: grocery-store-lambda
@@ -48,6 +47,26 @@ functions:
           method: get
           cors: true
 
+  createUser:
+    handler: handler.createUser
+    events:
+      - http:
+          path: api/users
+          method: post
+          cors: true
+    timeout: 10 # Correct placement
+    memorySize: 128 # Correct placement
+
+  createPost: # Fixed indentation for createPost function
+    handler: handler.createPost
+    events:
+      - http:
+          path: post
+          method: post
+          cors: true
+
 package:
   include:
     - node_modules/**
+    - handler.js
+    - package.json
