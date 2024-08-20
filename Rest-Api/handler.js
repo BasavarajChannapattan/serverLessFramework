@@ -1,8 +1,8 @@
-const axios = require('axios');
+const axios = require("axios");
 const { utils } = require("./helpers/index");
 const constants = utils.constants;
 
-const baseUrl= constants.baseUrl;
+const baseUrl = constants.baseUrl;
 
 module.exports.getStatus = async (event) => {
   try {
@@ -19,22 +19,20 @@ module.exports.getStatus = async (event) => {
   }
 };
 
-module.exports.getProducts = async (event)=>{
-  try{
-    const res = await axios.get(`${baseUrl}/products?results=20`)
-    return{
-      statusCode:res.status,
-      body:JSON.stringify(res.data),
+module.exports.getProducts = async (event) => {
+  try {
+    const res = await axios.get(`${baseUrl}/products?results=20`);
+    return {
+      statusCode: res.status,
+      body: JSON.stringify(res.data),
+    };
+  } catch (error) {
+    return {
+      statusCode: error.res ? error.res.status : 500,
+      body: JSON.stringify({ message: error.message }),
     };
   }
-  catch(error)
-  {
-    return{
-      statusCode:error.res?error.res.status:500,
-      body:JSON.stringify({message:error.message}),
-    };
-  }
-}
+};
 
 module.exports.createCart = async (event) => {
   try {
@@ -42,7 +40,7 @@ module.exports.createCart = async (event) => {
     const cartId = createCartRes.data.cartId;
 
     if (!cartId) {
-      throw new Error('Cart ID not found in the response');
+      throw new Error("Cart ID not found in the response");
     }
 
     return {
@@ -68,7 +66,7 @@ module.exports.getCart = async (event) => {
     if (!cartId) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ message: 'Cart ID is required' }),
+        body: JSON.stringify({ message: "Cart ID is required" }),
       };
     }
 

@@ -1,3 +1,6 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: simpleapp
+app: lego
 service: grocery-store-lambda
 
 provider:
@@ -20,7 +23,6 @@ functions:
           path: status
           method: get
           cors: true
-
 
   getProducts:
     handler: handler.getProducts
@@ -45,8 +47,6 @@ functions:
           path: carts/{cartId}
           method: get
           cors: true
-
-
 
 package:
   include:
