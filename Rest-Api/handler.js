@@ -89,36 +89,6 @@ module.exports.getCart = async (event) => {
   }
 };
 
-module.exports.createUser = async (event) => {
-  const body = JSON.parse(event.body);
-  try {
-    const res = await axios.post(`${baseUrl}/api/users`, {
-      name: body.name,
-      job: body.job,
-    });
-
-    console.log("API response data:", res.data);
-
-    return {
-      statusCode: 201,
-      body: JSON.stringify({
-        name: "Post created successfully",
-        job: res.data.id,
-        id: res.data,
-        createdAt: res.data.createdAt,
-      }),
-    };
-  } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "Error creating post",
-        error: error.message,
-      }),
-    };
-  }
-};
-
 module.exports.createPost = async (event) => {
   const data = JSON.parse(event.body);
 
